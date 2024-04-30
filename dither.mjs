@@ -86,7 +86,8 @@ function diffusionDither(normalizedPixels, width, height, ditherAlgorithm, palet
             const pixelIndex = 4*(y*width + x);
             const pixelColor = [normalizedPixels[pixelIndex], normalizedPixels[pixelIndex+1], normalizedPixels[pixelIndex+2]];
 
-            const [newColor, error] = findClosestPaletteColor(pixelColor, palette);
+            const newColor = findClosestPaletteColor(pixelColor, palette);
+            const error = subtractVec3(pixelColor, newColor);
 
             writePixel(outputNormalizedPixels, x, y, width, newColor[0], newColor[1], newColor[2], 1);
             diffuseQuantizationError(normalizedPixels, x, y, width, height, ditherAlgorithm, error);
@@ -101,26 +102,24 @@ function diffusionDither(normalizedPixels, width, height, ditherAlgorithm, palet
  *
  * @param {Array<number>} color a color to match against the palette
  * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
- * @returns {Array<Array<number>>} an array that contains the closest palette color to the input color and the error between the two
+ * @returns {Array<number>} the closest palette color to the input color
  */
 
 function findClosestPaletteColor(color, palette) {
     let closestPaletteColor;
-    let minError;
     let minErrorLengthSquared = Number.MAX_VALUE;
 
     for (let i = 0; i < palette.length; ++i) {
         const error = subtractVec3(color, palette[i]);
-        const deltaLengthSquared = lengthSquaredVec3(error);
+        const errorLengthSquared = lengthSquaredVec3(error);
 
-        if (deltaLengthSquared < minErrorLengthSquared) {
-            minErrorLengthSquared = deltaLengthSquared;
+        if (errorLengthSquared < minErrorLengthSquared) {
+            minErrorLengthSquared = errorLengthSquared;
             closestPaletteColor = palette[i];
-            minError = error;
         }
     }
 
-    return [closestPaletteColor, minError];
+    return closestPaletteColor;
 }
 
 /**
