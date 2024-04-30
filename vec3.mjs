@@ -18,14 +18,30 @@
 */
 
 /**
- * Generate a random integer between a and b. The range of possible values includes both a and b.
+ * Subtract two 3D vectors.
  *
- * @param {number} a lower end of possible range
- * @param {number} b upper end of possible range
- * @returns {number} random number between a and b
+ * @param {Array<number>} a the first 3D vector in the expression a - b
+ * @param {Array<number>} b the second 3D vector in the expression a - b
+ * @returns {Array<number>} the result of subtracting two 3D vectors
  */
 
-export function randomInt(a, b) {
-    const result = a + Math.round((b - a) * Math.random());
+export function subtractVec3(a, b) {
+    const result = [
+        a[0] - b[0],
+        a[1] - b[1],
+        a[2] - b[2],
+    ];
+    return result;
+}
+
+/**
+ * Calculate the squared length of a 3D vector.
+ *
+ * @param {Array<number>} a a 3D vector
+ * @returns {number} squared length of the 3D vector
+ */
+
+export function lengthSquaredVec3(a) {
+    const result = a[0]*a[0] + a[1]*a[1] + a[2]*a[2];
     return result;
 }

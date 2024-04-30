@@ -20,8 +20,8 @@
 /**
  * Load an image from a URL.
  *
- * @param {string} url URL for an image.
- * @returns {Promise<HTMLImageElement>} Returns a Promise that reolves to an image.
+ * @param {string} url URL for an image
+ * @returns {Promise<HTMLImageElement>} a Promise that reolves to an image
  */
 
 export async function loadImage(url) {
@@ -105,29 +105,29 @@ function createImageFromCanvas(canvas) {
 }
 
 /**
- * Create a zeroed-out array of pixels, suitable for creating an image.
+ * Create an array to contain normalized pixels for an image of the given width and height.
  *
- * @param {number} width width of the desired image
- * @param {number} height height of the desired image
- * @returns {Uint8ClampedArray} pixel array
+ * @param {number} width width of the image
+ * @param {number} height height of the image
+ * @returns {Array<number>} linear array of pixels
  */
 
-export function createPixels(width, height) {
-    const pixels = new Uint8ClampedArray(4 * width * height);
-    return pixels;
+export function createNormalizedPixels(width, height) {
+    const normalizedPixels = new Array(4 * width * height);
+    return normalizedPixels;
 }
 
 /**
  * Write the given RGBA values into a pixel array.
  *
- * @param {Uint8ClampedArray} pixels array of pixels
- * @param {number} x x position of the pixel within the image
- * @param {number} y y position of the pixel within the image
+ * @param {Array<number>|Uint8ClampedArray} pixels array of pixels
+ * @param {number} x x-position of the pixel within the image
+ * @param {number} y y-position of the pixel within the image
  * @param {number} width width of the image, necessary for indexing the array
- * @param {number} r red value from 0-255
- * @param {number} g green value from 0-255
- * @param {number} b blue value from 0-255
- * @param {number} a alpha value from 0-255
+ * @param {number} r red value
+ * @param {number} g green value
+ * @param {number} b blue value
+ * @param {number} a alpha value
  */
 
 export function writePixel(pixels, x, y, width, r, g, b, a) {
@@ -137,4 +137,38 @@ export function writePixel(pixels, x, y, width, r, g, b, a) {
     pixels[i+1] = g;
     pixels[i+2] = b;
     pixels[i+3] = a;
+}
+
+/**
+ * Convert color values from the integer range [0, 255] to float range [0, 1].
+ *
+ * @param {Uint8ClampedArray} pixels array of pixels whose color values are in the integer range [0, 255]
+ * @returns {Array<number>} array of pixels whose color values are in the float range [0, 1]
+ */
+
+export function normalizePixels(pixels) {
+    const normalizedPixels = new Array(pixels.length);
+
+    for (let i = 0; i < pixels.length; ++i) {
+        normalizedPixels[i] = pixels[i] / 255;
+    }
+
+    return normalizedPixels;
+}
+
+/**
+ * Convert color values from the float range [0, 1] to integer range [0, 255].
+ *
+ * @param {number} normalizedPixels array of pixels whose color values are in the float range [0, 1]
+ * @returns {Array<Uint8ClampedArray>} array of pixels whose color values are in the integer range [0, 255]
+ */
+
+export function denormalizePixels(normalizedPixels) {
+    const pixels = new Uint8ClampedArray(normalizedPixels.length);
+
+    for (let i = 0; i < normalizedPixels.length; ++i) {
+        pixels[i] = Math.round(255 * normalizedPixels[i]);
+    }
+
+    return pixels;
 }

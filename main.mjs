@@ -18,8 +18,7 @@
 */
 
 import { loadImage } from './image.mjs';
-import { convertImageToGrayscale } from './grayscale.mjs';
-import { ditherGrayscaleValues } from './dither.mjs';
+import { ditherImage } from './dither.mjs';
 
 /**
  * Main entry point for all JavaScript functionality.
@@ -28,9 +27,9 @@ import { ditherGrayscaleValues } from './dither.mjs';
  */
 
 export async function main() {
+    const palette = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [1, 1, 1]];
     const inputImage = await loadImage('./images/rabbit.jpg');
-    const grayscaleValues = convertImageToGrayscale(inputImage, 'average');
-    const outputImage = ditherGrayscaleValues(grayscaleValues, 'atkinson', inputImage.width, inputImage.height);
+    const outputImage = ditherImage(inputImage, 'atkinson', palette);
 
     document.body.appendChild(inputImage);
     document.body.appendChild(outputImage);

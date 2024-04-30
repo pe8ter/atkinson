@@ -17,16 +17,6 @@
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { randomInt } from './utils.mjs';
-import { BLACK_VALUE, WHITE_VALUE, DEFAULT_THRESHOLD } from './constants.mjs';
-
-/**
- * Type for "functional" algorithms. These algorithms use an actual function in their options to dither a pixel. Such
- * algorithms do not read or modify neighboring pixels.
- */
-
-export const ALGORITHM_TYPE_FUNCTIONAL = 'functional';
-
 /**
  * Type for "diffusion" algorithms. These algorithms work by distributing or "diffusing" quantization error for each
  * pixel onto its neighboring pixels.
@@ -39,21 +29,6 @@ export const ALGORITHM_TYPE_DIFFUSION = 'diffusion';
  */
 
 export const ditherAlgorithms = Object.freeze({
-    threshold: {
-        displayName: 'Threshold',
-        type: ALGORITHM_TYPE_FUNCTIONAL,
-        options: {
-            handler: (gray, threshold) => (gray < threshold) ? BLACK_VALUE : WHITE_VALUE,
-            threshold: DEFAULT_THRESHOLD,
-        },
-    },
-    random: {
-        displayName: 'Random',
-        type: ALGORITHM_TYPE_FUNCTIONAL,
-        options: {
-            handler: (gray, _threshold) => (randomInt(BLACK_VALUE, WHITE_VALUE) > gray) ? BLACK_VALUE : WHITE_VALUE,
-        },
-    },
     simple: {
         displayName: 'Simple',
         type: ALGORITHM_TYPE_DIFFUSION,
@@ -62,7 +37,6 @@ export const ditherAlgorithms = Object.freeze({
                 [0, 0, 1],
             ],
             divisor: 1,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     atkinson: {
@@ -75,7 +49,6 @@ export const ditherAlgorithms = Object.freeze({
                 [0, 0, 1, 0, 0],
             ],
             divisor: 8,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     floydSteinberg: {
@@ -87,7 +60,6 @@ export const ditherAlgorithms = Object.freeze({
                 [3, 5, 1],
             ],
             divisor: 16,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     falseFloydSteinberg: {
@@ -99,7 +71,6 @@ export const ditherAlgorithms = Object.freeze({
                 [0, 3, 2],
             ],
             divisor: 8,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     sierra: {
@@ -112,7 +83,6 @@ export const ditherAlgorithms = Object.freeze({
                 [0, 2, 3, 2, 0],
             ],
             divisor: 32,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     sierraTwoRow: {
@@ -124,7 +94,6 @@ export const ditherAlgorithms = Object.freeze({
                 [1, 2, 3, 2, 1],
             ],
             divisor: 16,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     sierraLite: {
@@ -136,7 +105,6 @@ export const ditherAlgorithms = Object.freeze({
                 [1, 1, 0],
             ],
             divisor: 4,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     jarvisJudiceNinke: {
@@ -149,7 +117,6 @@ export const ditherAlgorithms = Object.freeze({
                 [1, 3, 5, 3, 1],
             ],
             divisor: 48,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     stucki: {
@@ -162,7 +129,6 @@ export const ditherAlgorithms = Object.freeze({
                 [1, 2, 4, 2, 1],
             ],
             divisor: 42,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
     burkes: {
@@ -174,7 +140,6 @@ export const ditherAlgorithms = Object.freeze({
                 [2, 4, 8, 4, 2],
             ],
             divisor: 32,
-            threshold: DEFAULT_THRESHOLD,
         },
     },
 });
