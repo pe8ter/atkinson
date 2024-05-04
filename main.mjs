@@ -19,6 +19,7 @@
 
 import { loadImage } from './image.mjs';
 import { ditherImage } from './dither.mjs';
+import { createMacOS8BitPalette } from './palettes.mjs';
 
 /**
  * Main entry point for all JavaScript functionality.
@@ -27,7 +28,7 @@ import { ditherImage } from './dither.mjs';
  */
 
 export async function main() {
-    const palette = [[0, 0, 0], [1, 0, 0], [1, 1, 0], [1, 1, 1]];
+    const palette = createMacOS8BitPalette();
     const inputImage = await loadImage('./images/rabbit.jpg');
     const outputImage = ditherImage(inputImage, 'atkinson', palette);
 
