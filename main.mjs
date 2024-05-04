@@ -20,6 +20,10 @@
 import { loadImage } from './image.mjs';
 import { ditherImage } from './dither.mjs';
 import { createMacOS8BitPalette } from './palettes.mjs';
+import { ditherAlgorithms } from './ditherAlgorithms.mjs';
+
+const DEFAULT_ALGORITHM_NAME = 'atkinson';
+const PALETTE = createMacOS8BitPalette();
 
 /**
  * Main entry point for all JavaScript functionality.
@@ -28,10 +32,58 @@ import { createMacOS8BitPalette } from './palettes.mjs';
  */
 
 export async function main() {
-    const palette = createMacOS8BitPalette();
     const inputImage = await loadImage('./images/rabbit.jpg');
-    const outputImage = ditherImage(inputImage, 'atkinson', palette);
+    const inputImageContainer = document.querySelector('.image.input');
 
-    document.body.appendChild(inputImage);
-    document.body.appendChild(outputImage);
+    inputImageContainer.appendChild(inputImage);
+
+    initAlgorithmSelect();
+}
+
+/**
+ * Set up the algorithm select input and perform the first dither.
+ */
+
+function initAlgorithmSelect() {
+    const selectElem = document.querySelector('.controls select');
+    const algorithmNames = Object.keys(ditherAlgorithms);
+
+    for (const algorithmName of algorithmNames) {
+        const optionElem = document.createElement('option');
+        const displayName = ditherAlgorithms[algorithmName].displayName;
+
+        optionElem.value = algorithmName;
+        optionElem.innerHTML = displayName;
+
+        selectElem.appendChild(optionElem);
+    }
+
+    selectElem.addEventListener('change', (_event) => {
+        onAlgorithmSelect(selectElem.value);
+    });
+
+    // Set the default value.
+    const defaultOptionElem = selectElem.querySelector(`[value=${DEFAULT_ALGORITHM_NAME}]`);
+    defaultOptionElem.selected = true;
+    onAlgorithmSelect(DEFAULT_ALGORITHM_NAME);
+}
+
+/**
+ * Event handler for the algorithm select input. Renders the image using the selected algorithm.
+ *
+ * @param {string} algorithmName name of the selected algorithm
+ */
+
+function onAlgorithmSelect(algorithmName) {
+    const outputImageContainer = document.querySelector('.image.output');
+    const oldOutputImage = outputImageContainer.querySelector('img');
+
+    if (oldOutputImage) {
+        oldOutputImage.remove();
+    }
+
+    const inputImage = document.querySelector('.image.input img');
+    const outputImage = ditherImage(inputImage, algorithmName, PALETTE);
+
+    outputImageContainer.appendChild(outputImage);
 }

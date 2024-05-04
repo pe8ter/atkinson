@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<!--
+/*
     MIT No Attribution
 
     Copyright 2024 Peter Safranek
@@ -16,31 +15,8 @@
     HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
     OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
--->
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Dither</title>
-        <link rel="stylesheet" href="./index.css">
-    </head>
-    <body>
-        <div class="images">
-            <div class="image input"></div>
-            <div class="image output"></div>
-        </div>
-        <div class="controls">
-            <select></select>
-        </div>
-        <script type="module">
-            import { main } from './main.mjs';
-            (async function _bootstrap() {
-                try {
-                    await main();
-                } catch (err) {
-                    console.error('Encountered unhandled exception.');
-                    console.error(err);
-                }
-            })();
-        </script>
-    </body>
-</html>
+*/
+
+.image {
+    display: inline;
+}
