@@ -1,6 +1,6 @@
 # atkinson
 
-A web-based program for experimenting with ditering.
+A web-based program for experimenting with dithering.
 
 ## Serve locally
 
