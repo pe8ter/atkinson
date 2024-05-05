@@ -17,8 +17,8 @@
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { ditherAlgorithms, ALGORITHM_TYPE_DIFFUSION } from './ditherAlgorithms.mjs';
-import { subtractVec3, lengthSquaredVec3 } from './vec3.mjs';
+import { ditherAlgorithms, ALGORITHM_TYPE_DIFFUSION } from './ditherAlgorithms.js';
+import { subtractVec3, lengthSquaredVec3 } from './vec3.js';
 
 import {
     createImageFromPixels,
@@ -27,13 +27,13 @@ import {
     normalizePixels,
     denormalizePixels,
     writePixel,
-} from './image.mjs';
+} from './image.js';
 
 /**
  * Dither grayscale values using the given algorithm.
  *
  * @param {HTMLImageElement} inputImage the image to dither
- * @param {string} algorithmName name of the dithering algorithm (see ditherAlgorithms.mjs)
+ * @param {string} algorithmName name of the dithering algorithm (see ditherAlgorithms.js)
  * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
  * @returns
  */
@@ -73,7 +73,7 @@ export function ditherImage(inputImage, algorithmName, palette) {
  * @param {Array<number>} normalizedPixels a linear array of pixels
  * @param {number} width width in pixels of the image
  * @param {number} height height in pixels of the image
- * @param {object} ditherAlgorithm an object that contains options for a dithering algorithm variant (see ditherAlgorithms.mjs)
+ * @param {object} ditherAlgorithm an object that contains options for a dithering algorithm variant (see ditherAlgorithms.js)
  * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
  * @returns {Array<number>} image pixels whose colors are restricted to the input palette
  */
@@ -131,7 +131,7 @@ function findClosestPaletteColor(color, palette) {
  * @param {number} y y-position of the current pixel
  * @param {number} width width of the image
  * @param {number} height height of the image
- * @param {object} ditherAlgorithm an object that contains options for a dithering algorithm variant (see ditherAlgorithms.mjs)
+ * @param {object} ditherAlgorithm an object that contains options for a dithering algorithm variant (see ditherAlgorithms.js)
  * @param {Array<number>} error error between the current pixel and its closest palette color
  */
 

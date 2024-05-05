@@ -17,10 +17,10 @@
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-import { loadImage } from './image.mjs';
-import { ditherImage } from './dither.mjs';
-import { createMacOS8BitPalette } from './palettes.mjs';
-import { ditherAlgorithms } from './ditherAlgorithms.mjs';
+import { loadImage } from './image.js';
+import { ditherImage } from './dither.js';
+import { createMacOS8BitPalette } from './palettes.js';
+import { ditherAlgorithms } from './ditherAlgorithms.js';
 
 const DEFAULT_ALGORITHM_NAME = 'atkinson';
 const PALETTE = createMacOS8BitPalette();
