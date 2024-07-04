@@ -35,7 +35,7 @@ import {
  * @param {HTMLImageElement} inputImage the image to dither
  * @param {string} algorithmName name of the dithering algorithm (see ditherAlgorithms.js)
  * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
- * @returns
+ * @returns {Promise<HTMLImageElement>} a Promise that resolves to the final dithered image
  */
 
 export function ditherImage(inputImage, algorithmName, palette) {
