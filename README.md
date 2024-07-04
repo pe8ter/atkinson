@@ -13,3 +13,5 @@ If you have npm installed, you can run a local HTTP server with disabled cache:
 ```bash
 npx http-server -c-1
 ```
+
+Navigate to http://localhost:8080/src.
