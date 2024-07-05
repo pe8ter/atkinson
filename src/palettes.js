@@ -17,13 +17,24 @@
     SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+export const palettes = Object.freeze({
+    blackAndWhite: {
+        displayName: 'Black and White',
+        palette: [[0, 0, 0], [1, 1, 1]],
+    },
+    macos8bit: {
+        displayName: 'Mac OS 8-bit',
+        palette: createMacOS8BitPalette(),
+    },
+});
+
 /**
  * Create the 1990s Mac OS 8 bit color palette.
  *
  * @returns {Array<Array<number>>} color palette
  */
 
-export function createMacOS8BitPalette() {
+function createMacOS8BitPalette() {
     const palette = new Array(256);
 
     for (let i = 0; i < palette.length; ++i) {

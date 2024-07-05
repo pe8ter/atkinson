@@ -19,11 +19,14 @@
 
 import { loadImage } from './image.js';
 import { quantizeImage, ditherImage } from './dither.js';
-import { createMacOS8BitPalette } from './palettes.js';
+import { palettes } from './palettes.js';
 import { ditherAlgorithms } from './ditherAlgorithms.js';
 
 const DEFAULT_ALGORITHM_NAME = 'atkinson';
-const PALETTE = createMacOS8BitPalette();
+const DEFAULT_PALETTE_NAME = 'blackAndWhite';
+
+let currenAlgorithmName = DEFAULT_ALGORITHM_NAME;
+let currentPaletteName = DEFAULT_PALETTE_NAME;
 
 /**
  * Main entry point for all JavaScript functionality.
@@ -38,9 +41,10 @@ export async function main() {
     inputImageContainer.appendChild(inputImage);
 
     renderQuantizedImage();
-    renderDitheredImage(DEFAULT_ALGORITHM_NAME);
+    renderDitheredImage();
 
     initAlgorithmSelect();
+    initPaletteSelect();
 }
 
 /**
@@ -48,7 +52,7 @@ export async function main() {
  */
 
 function initAlgorithmSelect() {
-    const selectElem = document.querySelector('.controls select');
+    const selectElem = document.querySelector('#algorithm-select');
     const algorithmNames = Object.keys(ditherAlgorithms);
 
     for (const algorithmName of algorithmNames) {
@@ -62,11 +66,41 @@ function initAlgorithmSelect() {
     }
 
     selectElem.addEventListener('change', (_event) => {
-        renderDitheredImage(selectElem.value);
+        currenAlgorithmName = selectElem.value;
+        renderDitheredImage();
     });
 
     // Set the default value.
     const defaultOptionElem = selectElem.querySelector(`[value=${DEFAULT_ALGORITHM_NAME}]`);
+    defaultOptionElem.selected = true;
+}
+
+/**
+ * Set up the palette select input.
+ */
+
+function initPaletteSelect() {
+    const selectElem = document.querySelector('#palette-select');
+    const paletteNames = Object.keys(palettes);
+
+    for (const paletteName of paletteNames) {
+        const optionElem = document.createElement('option');
+        const displayName = palettes[paletteName].displayName;
+
+        optionElem.value = paletteName;
+        optionElem.innerHTML = displayName;
+
+        selectElem.appendChild(optionElem);
+    }
+
+    selectElem.addEventListener('change', (_event) => {
+        currentPaletteName = selectElem.value;
+        renderQuantizedImage();
+        renderDitheredImage();
+    });
+
+    // Set the default value.
+    const defaultOptionElem = selectElem.querySelector(`[value=${DEFAULT_PALETTE_NAME}]`);
     defaultOptionElem.selected = true;
 }
 
@@ -82,18 +116,16 @@ function renderQuantizedImage() {
         oldOutputImage.remove();
     }
 
-    const outputImage = quantizeImage(getInputImage(), PALETTE);
+    const outputImage = quantizeImage(getInputImage(), palettes[currentPaletteName].palette);
 
     outputImageContainer.appendChild(outputImage);
 }
 
 /**
  * Render the dithered image using the specified algorithm and insert it into the DOM.
- *
- * @param {string} algorithmName name of the selected algorithm
  */
 
-function renderDitheredImage(algorithmName) {
+function renderDitheredImage() {
     const outputImageContainer = document.querySelector('.image.output.dithered');
     const oldOutputImage = outputImageContainer.querySelector('img');
 
@@ -101,7 +133,7 @@ function renderDitheredImage(algorithmName) {
         oldOutputImage.remove();
     }
 
-    const outputImage = ditherImage(getInputImage(), algorithmName, PALETTE);
+    const outputImage = ditherImage(getInputImage(), currenAlgorithmName, palettes[currentPaletteName].palette);
 
     outputImageContainer.appendChild(outputImage);
 }
