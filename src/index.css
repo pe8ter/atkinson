@@ -19,4 +19,5 @@
 
 .image {
     display: inline;
+    image-rendering: pixelated;
 }
