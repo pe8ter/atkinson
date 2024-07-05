@@ -35,7 +35,7 @@ import {
  * @param {HTMLImageElement} inputImage the image to dither
  * @param {string} algorithmName name of the dithering algorithm (see ditherAlgorithms.js)
  * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
- * @returns {Promise<HTMLImageElement>} a Promise that resolves to the final dithered image
+ * @returns {HTMLImageElement} the final dithered image
  */
 
 export function ditherImage(inputImage, algorithmName, palette) {
@@ -165,4 +165,37 @@ function diffuseQuantizationError(normalizedPixels, x, y, width, height, ditherA
             normalizedPixels[targetNormalizedPixelIndex+2] += diffusionFactor * error[2];
         }
     }
+}
+
+/**
+ * Quantize an image to a particular palette without applying any dither.
+ *
+ * @param {HTMLImageElement} inputImage the image to quantize
+ * @param {Array<Array<number>>} palette each palette color is an array of RGB color value arrays in the range [0, 1]
+ * @returns {HTMLImageElement} an image whose colors are restricted to the input palette
+ */
+
+export function quantizeImage(inputImage, palette) {
+    const inputPixels = extractPixelsFromImage(inputImage);
+    const inputNormalizedPixels = normalizePixels(inputPixels);
+
+    const width = inputImage.width;
+    const height = inputImage.height;
+
+    const outputNormalizedPixels = createNormalizedPixels(width, height);
+
+    for (let y = 0; y < height; ++y) {
+        for (let x = 0; x < width; ++x) {
+            const pixelIndex = 4*(y*width + x);
+            const pixelColor = [inputNormalizedPixels[pixelIndex], inputNormalizedPixels[pixelIndex+1], inputNormalizedPixels[pixelIndex+2]];
+            const newColor = findClosestPaletteColor(pixelColor, palette);
+
+            writePixel(outputNormalizedPixels, x, y, width, newColor[0], newColor[1], newColor[2], 1);
+        }
+    }
+
+    const outputPixels = denormalizePixels(outputNormalizedPixels);
+    const outputImage = createImageFromPixels(outputPixels, width, height);
+
+    return outputImage;
 }

@@ -18,7 +18,7 @@
 */
 
 import { loadImage } from './image.js';
-import { ditherImage } from './dither.js';
+import { quantizeImage, ditherImage } from './dither.js';
 import { createMacOS8BitPalette } from './palettes.js';
 import { ditherAlgorithms } from './ditherAlgorithms.js';
 
@@ -75,15 +75,29 @@ function initAlgorithmSelect() {
  */
 
 function onAlgorithmSelect(algorithmName) {
-    const outputImageContainer = document.querySelector('.image.output');
-    const oldOutputImage = outputImageContainer.querySelector('img');
+    const inputImage = document.querySelector('.image.input img');
 
-    if (oldOutputImage) {
-        oldOutputImage.remove();
+    // Regenerate the quantized image.
+    const quantizedOutputImageContainer = document.querySelector('.image.output.quantized');
+    const oldQuantizedOutputImage = quantizedOutputImageContainer.querySelector('img');
+
+    if (oldQuantizedOutputImage) {
+        oldQuantizedOutputImage.remove();
     }
 
-    const inputImage = document.querySelector('.image.input img');
-    const outputImage = ditherImage(inputImage, algorithmName, PALETTE);
+    const quantizedOutputImage = quantizeImage(inputImage, PALETTE);
 
-    outputImageContainer.appendChild(outputImage);
+    quantizedOutputImageContainer.appendChild(quantizedOutputImage);
+
+    // Regenerate the dithered image.
+    const ditheredOutputImageContainer = document.querySelector('.image.output.dithered');
+    const oldDitheredOutputImage = ditheredOutputImageContainer.querySelector('img');
+
+    if (oldDitheredOutputImage) {
+        oldDitheredOutputImage.remove();
+    }
+
+    const ditheredOutputImage = ditherImage(inputImage, algorithmName, PALETTE);
+
+    ditheredOutputImageContainer.appendChild(ditheredOutputImage);
 }
