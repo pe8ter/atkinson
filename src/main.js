@@ -37,11 +37,14 @@ export async function main() {
 
     inputImageContainer.appendChild(inputImage);
 
+    renderQuantizedImage();
+    renderDitheredImage(DEFAULT_ALGORITHM_NAME);
+
     initAlgorithmSelect();
 }
 
 /**
- * Set up the algorithm select input and perform the first dither.
+ * Set up the algorithm select input.
  */
 
 function initAlgorithmSelect() {
@@ -59,45 +62,57 @@ function initAlgorithmSelect() {
     }
 
     selectElem.addEventListener('change', (_event) => {
-        onAlgorithmSelect(selectElem.value);
+        renderDitheredImage(selectElem.value);
     });
 
     // Set the default value.
     const defaultOptionElem = selectElem.querySelector(`[value=${DEFAULT_ALGORITHM_NAME}]`);
     defaultOptionElem.selected = true;
-    onAlgorithmSelect(DEFAULT_ALGORITHM_NAME);
 }
 
 /**
- * Event handler for the algorithm select input. Renders the image using the selected algorithm.
+ * Render the quantized image and insert it into the DOM.
+ */
+
+function renderQuantizedImage() {
+    const outputImageContainer = document.querySelector('.image.output.quantized');
+    const oldOutputImage = outputImageContainer.querySelector('img');
+
+    if (oldOutputImage) {
+        oldOutputImage.remove();
+    }
+
+    const outputImage = quantizeImage(getInputImage(), PALETTE);
+
+    outputImageContainer.appendChild(outputImage);
+}
+
+/**
+ * Render the dithered image using the specified algorithm and insert it into the DOM.
  *
  * @param {string} algorithmName name of the selected algorithm
  */
 
-function onAlgorithmSelect(algorithmName) {
+function renderDitheredImage(algorithmName) {
+    const outputImageContainer = document.querySelector('.image.output.dithered');
+    const oldOutputImage = outputImageContainer.querySelector('img');
+
+    if (oldOutputImage) {
+        oldOutputImage.remove();
+    }
+
+    const outputImage = ditherImage(getInputImage(), algorithmName, PALETTE);
+
+    outputImageContainer.appendChild(outputImage);
+}
+
+/**
+ * Get the input image from the DOM.
+ *
+ * @returns {HTMLImageElement} the input image
+ */
+
+function getInputImage() {
     const inputImage = document.querySelector('.image.input img');
-
-    // Regenerate the quantized image.
-    const quantizedOutputImageContainer = document.querySelector('.image.output.quantized');
-    const oldQuantizedOutputImage = quantizedOutputImageContainer.querySelector('img');
-
-    if (oldQuantizedOutputImage) {
-        oldQuantizedOutputImage.remove();
-    }
-
-    const quantizedOutputImage = quantizeImage(inputImage, PALETTE);
-
-    quantizedOutputImageContainer.appendChild(quantizedOutputImage);
-
-    // Regenerate the dithered image.
-    const ditheredOutputImageContainer = document.querySelector('.image.output.dithered');
-    const oldDitheredOutputImage = ditheredOutputImageContainer.querySelector('img');
-
-    if (oldDitheredOutputImage) {
-        oldDitheredOutputImage.remove();
-    }
-
-    const ditheredOutputImage = ditherImage(inputImage, algorithmName, PALETTE);
-
-    ditheredOutputImageContainer.appendChild(ditheredOutputImage);
+    return inputImage;
 }
