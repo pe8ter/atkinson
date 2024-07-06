@@ -142,4 +142,28 @@ export const ditherAlgorithms = Object.freeze({
             divisor: 32,
         },
     },
+    stevensonArce: {
+        displayName: 'Stevenson-Arce',
+        type: ALGORITHM_TYPE_DIFFUSION,
+        options: {
+            multipliers: [
+                [ 0,  0,  0,  0,  0, 32,  0],
+                [12,  0, 26,  0, 30,  0, 16],
+                [ 0, 12,  0, 26,  0, 12,  0],
+                [ 5,  0, 12,  0, 12,  0,  5],
+            ],
+            divisor: 200,
+        },
+    },
+    shiauFan: {
+        displayName: 'Shiau-Fan',
+        type: ALGORITHM_TYPE_DIFFUSION,
+        options: {
+            multipliers: [
+                [0, 0, 0, 0, 8, 0, 0],
+                [1, 1, 2, 4, 0, 0, 0],
+            ],
+            divisor: 16,
+        },
+    },
 });
